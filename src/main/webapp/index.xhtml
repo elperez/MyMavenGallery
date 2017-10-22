@@ -34,35 +34,46 @@
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
-                    <h:form id="tableFormId">
-                        <p:dataTable id="tablePhotosId"
-                                     value="#{myGalleryBean.photos}"
-                                     var="t"
-                                     rows="10"
-                                     paginator="true"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink}
-                                                        {PreviousPageLink} {PageLinks} {NextPageLink}
-                                                        {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10"
-                                     emptyMessage="No photos found ...">
-                            <p:column headerText="Preview" style="width:50px;">
-                                <p:graphicImage id="previewId" name="icons/preview.png"
-                                                style="cursor:pointer" />
-                                <p:overlayPanel id="previewPaneId" for="previewId"
-                                                showEffect="blind" hideEffect="explode"
-                                                showEvent="mouseover" hideEvent="mouseout"
-                                                showCloseIcon="true">
-                                    <p:graphicImage name="photos/#{t.name}" width="200" height="105"/>
-                                </p:overlayPanel>
-                            </p:column>
-                            <p:column style="width:15px;">
-                                <h:selectBooleanCheckbox value="#{t.selected}" />
-                            </p:column>
-                            <p:column headerText="Name">
-                                <h:outputText value="#{t.name}"/>
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>
+                    <p:panelGrid columns="2">
+                        <h:form id="tableFormId">
+                            <p:dataTable id="tablePhotosId"
+                                         value="#{myGalleryBean.photos}"
+                                         var="t"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+                                         {PreviousPageLink} {PageLinks} {NextPageLink}
+                                         {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10"
+                                         emptyMessage="No photos found ...">
+                                <p:column headerText="Preview" style="width:50px;">
+                                    <p:graphicImage id="previewId" name="icons/preview.png"
+                                                    style="cursor:pointer" />
+                                    <p:overlayPanel id="previewPaneId" for="previewId"
+                                                    showEffect="blind" hideEffect="explode"
+                                                    showEvent="mouseover" hideEvent="mouseout"
+                                                    showCloseIcon="true">
+                                        <p:graphicImage name="photos/#{t.name}" width="200" height="105"/>
+                                    </p:overlayPanel>
+                                </p:column>
+                                <p:column style="width:15px;">
+                                    <h:selectBooleanCheckbox value="#{t.selected}" />
+                                </p:column>
+                                <p:column headerText="Name">
+                                    <h:outputText value="#{t.name}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <p:commandButton value="Refresh Gallery" update=":galleriaId" icon="ui-icon-refresh" />
+                        </h:form>
+                        <p:galleria id="galleriaId"
+                                    value="#{myGallergyBean.photos.stream().filter((i)->i.selected eq true).toList()}"
+                                    var="t"
+                                    panelWidth="800" panelHeight="400"
+                                    showCaption="true"
+                                    autoPlay="false" effectSpeed="1000">
+                            <p:graphicImage name="photos/#{t.name}" title="#{t.name}" width="800" height="400"/>
+                        </p:galleria>
+                    </p:panelGrid>
                 </p:layoutUnit>
 
             </p:layout>

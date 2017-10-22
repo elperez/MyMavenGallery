@@ -1,15 +1,37 @@
 package com.packt.video;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.io.Serializable;
 
 /**
  *
  * @author kit.perez
  */
-public class MyPhoto {
+public class MyPhoto implements Serializable {
+    
+    private String name;
+    private boolean selected;
+
+    public MyPhoto(String name, boolean selected) {
+        this.name = name;
+        this.selected = selected;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+    
+    
     
 }

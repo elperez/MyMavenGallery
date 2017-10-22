@@ -67,7 +67,7 @@
                             <p:commandButton type="button" process="none" value="Upload Photos" onclick="PF('uploadPhotosDialog').show();" icon="ui-icon-plusthick"/>
                         </h:form>
                         <p:galleria id="galleriaId"
-                                    value="#{myGallergyBean.photos.stream().filter((i)->i.selected eq true).toList()}"
+                                    value="#{myGalleryBean.photos.stream().filter((i)->i.selected eq true).toList()}"
                                     var="t"
                                     panelWidth="800" panelHeight="400"
                                     showCaption="true"

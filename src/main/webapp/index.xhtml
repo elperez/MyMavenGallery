@@ -25,12 +25,12 @@
 
             <p:layout fullPage="true">
 
-                <p:layoutUnit position="north" size="100" resizable="false" closable="false" collapsible="false">
-                    Header
+                <p:layoutUnit position="north" style="text-align:center" size="100" resizable="false" closable="false" collapsible="false">
+                    <p:graphicImage name="icons/logo.png"/>
                 </p:layoutUnit>
 
-                <p:layoutUnit position="south" size="100" resizable="false" closable="true" collapsible="true">
-                    Footer
+                <p:layoutUnit position="south" style="text-align:right" size="100" resizable="false" closable="true" collapsible="true">
+                    <p:graphicImage name="icons/pakt.png"/>
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
@@ -64,6 +64,7 @@
                                 </p:column>
                             </p:dataTable>
                             <p:commandButton value="Refresh Gallery" update=":galleriaId" icon="ui-icon-refresh" />
+                            <p:commandButton type="button" process="none" value="Upload Photos" onclick="PF('uploadPhotosDialog').show();" icon="ui-icon-plusthick"/>
                         </h:form>
                         <p:galleria id="galleriaId"
                                     value="#{myGallergyBean.photos.stream().filter((i)->i.selected eq true).toList()}"
@@ -77,6 +78,22 @@
                 </p:layoutUnit>
 
             </p:layout>
+
+            <p:dialog header="Upload New Photos"
+                      widgetVar="uploadPhotosDialog"
+                      modal="true"
+                      resizable="false"
+                      width="850" height="500">
+                <h:form>
+                    <p:fileUpload id="uploadFileId"
+                                  fileUploadListener="#{myGalleryBean.handleFileUpload}"
+                                  mode="advanced" multiple="true"
+                                  update="uploadFileId, :tableFormId:tablePhotosId"
+                                  sizeLimit="2097152" fileLimit="300"
+                                  allowTypes="/(\.|\/)(gif|jpeg|png)$/"
+                                  dragDropSupport="false" />
+                </h:form>
+            </p:dialog>
 
         </h:body>
 

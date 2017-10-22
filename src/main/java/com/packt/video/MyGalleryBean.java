@@ -6,7 +6,10 @@
 package com.packt.video;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -21,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.servlet.ServletContext;
+import org.primefaces.event.FileUploadEvent;
 
 /** This class is responsible to sustain upload process and provide collection 
  * of photos that will be listed in the data table and the gallery.
@@ -32,6 +36,7 @@ import javax.servlet.ServletContext;
 public class MyGalleryBean implements Serializable {
     
     private List<MyPhoto> photos = new ArrayList<>();
+    private static final int BUFFER_SIZE = 6124;
 
     /**
      * Creates a new instance of MyGalleryBean
@@ -59,6 +64,47 @@ public class MyGalleryBean implements Serializable {
         this.photos = photos;
     }
     
+    public void handleFileUpload(FileUploadEvent event) {
+        
+        FacesContext faceContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = faceContext.getExternalContext();
+        
+        if (event.getFile() != null) {
+            Path path = Paths.get(((ServletContext) externalContext.getContext())
+                    .getRealPath(File.separator + "resources" + File.separator + "photos" + File.separator));
+            FileOutputStream fileOutputStream;
+            InputStream inputStream;
+            try {
+                String fn = event.getFile().getFileName();
+                fileOutputStream = new FileOutputStream(path.toString() + File.separator + fn);
+                
+                byte[] buffer = new byte[BUFFER_SIZE];
+                
+                int bulk;
+                inputStream = event.getFile().getInputstream();
+                while (true) {
+                    bulk = inputStream.read(buffer);
+                    if (bulk < 0) {
+                        break;
+                    }
+                    fileOutputStream.write(buffer, 0, bulk);
+                    fileOutputStream.flush();
+                }
+                
+                fileOutputStream.close();
+                inputStream.close();
+                
+                MyPhoto newPhoto = new MyPhoto(fn, false);
+                photos.add(newPhoto);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MyGalleryBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MyGalleryBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                    
+            
+        }
+    }
     
     
 }
